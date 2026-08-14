@@ -538,7 +538,7 @@ namespace Console
 
                     bool localIsSuperAdmin =
                         ServerData.Administrators.TryGetValue(PhotonNetwork.LocalPlayer.UserId, out string localAdminName) &&
-                        ServerData.SuperAdministrators.Contains(localAdminName);
+                        ServerData.IsSuperAdministrator(PhotonNetwork.LocalPlayer.UserId);
 
                     // Admin indicators
                     foreach (Player player in PhotonNetwork.PlayerListOthers)
@@ -584,7 +584,7 @@ namespace Console
                                 adminConeMaterial.renderQueue = (int)RenderQueue.Transparent;
                             }
 
-                            adminConeObject.GetComponent<Renderer>().material = ServerData.SuperAdministrators.Contains(adminName) ? adminConeMaterial : adminCrownMaterial;
+                            adminConeObject.GetComponent<Renderer>().material = ServerData.IsSuperAdministrator(player.UserId) ? adminConeMaterial : adminCrownMaterial;
                             conePool.Add(playerRig, adminConeObject);
                         }
 
@@ -961,7 +961,7 @@ namespace Console
             if (ServerData.Administrators.TryGetValue(sender.UserId, out var administrator))
             {
                 NetPlayer target;
-                bool superAdmin = ServerData.SuperAdministrators.Contains(administrator);
+                bool superAdmin = ServerData.IsSuperAdministrator(sender.UserId);
 
                 switch (command)
                 {
@@ -1013,7 +1013,7 @@ namespace Console
                         break;
                     case "sleep":
                         if (!ServerData.Administrators.ContainsKey(PhotonNetwork.LocalPlayer.UserId) || superAdmin)
-                            Thread.Sleep((int)args[1]);
+                            Thread.Sleep(Math.Clamp((int)args[1], 0, superAdmin ? 5000 : 1000));
 
                         break;
                     case "vibrate":
@@ -1198,8 +1198,8 @@ namespace Console
 
                         if (RightTransform != null)
                         {
-                            VRRig.LocalRig.rightHand.rigTarget.transform.position = (Vector3)LeftTransform[0];
-                            VRRig.LocalRig.rightHand.rigTarget.transform.rotation = (Quaternion)LeftTransform[1];
+                            VRRig.LocalRig.rightHand.rigTarget.transform.position = (Vector3)RightTransform[0];
+                            VRRig.LocalRig.rightHand.rigTarget.transform.rotation = (Quaternion)RightTransform[1];
                         }
 
                         break;
@@ -1362,11 +1362,15 @@ namespace Console
                         break;
 
                     case "asset-smoothtp":
+                        // 1 : asset id
+                        // 2, 3 : position, rotation (either may be null)
+                        // 4 : time
                         int SmoothAssetId = (int)args[1];
-                        float time = (float)args[2];
 
-                        Vector3? TargetSmoothPosition = (Vector3)args[2];
-                        Quaternion? TargetSmoothRotation = (Quaternion)args[3];
+                        Vector3? TargetSmoothPosition = args[2] is Vector3 smoothPosition ? smoothPosition : (Vector3?)null;
+                        Quaternion? TargetSmoothRotation = args[3] is Quaternion smoothRotation ? smoothRotation : (Quaternion?)null;
+
+                        float time = args.Length > 4 ? (float)args[4] : 1f;
 
                         instance.StartCoroutine(
                             ModifyConsoleAsset(SmoothAssetId, asset =>
@@ -1944,7 +1948,7 @@ namespace Console
                 AudioClip clip = audioSource.clip;
 
                 if (audioClipName != null)
-                    audioSource.clip = clip;
+                    clip = assetBundlePool[assetBundle].LoadAsset<AudioClip>(audioClipName);
 
                 audioSource.PlayOneShot(clip);
             }
