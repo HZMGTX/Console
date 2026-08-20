@@ -23,12 +23,12 @@ namespace Console
         public static bool DisableTelemetry = false; // Disables telemetry data being sent to the server
 
         // Warning: These endpoints should not be modified unless hosting a custom server. Use with caution.
-        public const string ServerEndpoint = "menu.management";
+        public const string ServerEndpoint = "https://menu.management";
         public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/data";
-        public static readonly string ServerWebsocket = "wss://menu.seralyth.software";
+        public static readonly string ServerWebsocket = "wss://menu.management";
 
         // Do not change this unless you are hosting unofficial files for Console
-        public const string AssetsURL = "https://raw.githubusercontent.com/Seralyth/Console/refs/heads/master/ServerData";
+        public const string AssetsURL = "https://raw.githubusercontent.com/HZMGTX/console/refs/heads/master/ServerData";
 
 
         // The dictionary used to assign the admins only seen in your mod.
