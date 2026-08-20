@@ -151,6 +151,35 @@ namespace Console
 
         public static readonly Dictionary<string, string> Administrators = new Dictionary<string, string>();
         public static readonly List<string> SuperAdministrators = new List<string>();
+
+        // Super administrators are listed by name, so a name is only trusted when it maps to
+        // exactly one administrator. This stops a second admin sharing a super admin's name
+        // (through the server list or LocalAdmins) from inheriting their permissions.
+        // User IDs are always matched directly.
+        public static bool IsSuperAdministrator(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+                return false;
+
+            if (SuperAdministrators.Contains(userId))
+                return true;
+
+            if (!Administrators.TryGetValue(userId, out string name) || !SuperAdministrators.Contains(name))
+                return false;
+
+            int nameHolders = 0;
+            foreach (KeyValuePair<string, string> administrator in Administrators)
+            {
+                if (administrator.Value != name) continue;
+                nameHolders++;
+
+                if (nameHolders > 1)
+                    return false;
+            }
+
+            return true;
+        }
+
         public static IEnumerator LoadServerData()
         {
             using (UnityWebRequest request = UnityWebRequest.Get(ServerDataEndpoint))
