@@ -23,8 +23,8 @@ namespace Console
         public static bool DisableTelemetry = false; // Disables telemetry data being sent to the server
 
         // Warning: These endpoints should not be modified unless hosting a custom server. Use with caution.
-        public const string ServerEndpoint = "https://menu.management";
-        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/serverdata";
+        public const string ServerEndpoint = "menu.management";
+        public static readonly string ServerDataEndpoint = $"{ServerEndpoint}/data";
         public static readonly string ServerWebsocket = "wss://menu.seralyth.software";
 
         // Do not change this unless you are hosting unofficial files for Console
