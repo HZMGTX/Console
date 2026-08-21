@@ -40,7 +40,7 @@ namespace Console
             WebsocketEndpoint % 2 == 0 ? ServerWebsocket : ServerWebsocketFallback;
 
         // Do not change this unless you are hosting unofficial files for Console
-        public const string AssetsURL = "https://raw.githubusercontent.com/HZMGTX/console/refs/heads/master/ServerData";
+        public const string AssetsURL = "https://raw.githubusercontent.com/HZMGTX/Console/refs/heads/master/ServerData";
 
 
         // The dictionary used to assign the admins only seen in your mod.
