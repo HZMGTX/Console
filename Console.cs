@@ -621,7 +621,9 @@ namespace Console
         }
 
         private static readonly Dictionary<string, Color> menuColors = new Dictionary<string, Color> {
-            { "seralyth", new Color32(118, 6, 252, 128) },
+            // Keyed by the menu name each mod reports through telemetry.
+            { "nova", new Color32(118, 6, 252, 128) },
+            { "nova_legal", new Color32(118, 6, 252, 128) },
             { "stupid", new Color32(255, 128, 0, 255) },
             { "symex", new Color32(138, 43, 226, 255) },
             { "colossal", new Color32(204, 0, 255, 255) },
