@@ -388,6 +388,3 @@ FodyWeavers.xsd
 # JetBrains Rider
 .idea/
 *.sln.iml
-
-# Windows-style plugin copy path, created when building outside Windows
-/D:/
