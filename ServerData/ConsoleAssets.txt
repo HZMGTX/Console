@@ -111,7 +111,6 @@ medkit
 menuobject
 minitravis
 minos
-mistscythe
 monster2
 monsters
 mrbeast_meme
